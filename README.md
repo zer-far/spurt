@@ -1,6 +1,6 @@
 # GETBLAZE: HTTP GET flooder
 
-getblaze can send more than 1k requests per second from a single machine.
+This program can send more than 1,000 requests per second from a single machine.
 
 # Building
 ```
