@@ -114,16 +114,21 @@ func loop() {
 
 func main() {
 	color.Cyan.Println("getblaze - https://github.com/zer-far/getblaze")
+
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
 	flag.Parse()
-	if hostname == "" {
+
+	if len(hostname) == 0 {
 		color.Red.Println("Missing hostname.")
 		color.Blue.Println("Example usage:\n\t ./getblaze --hostname https://example.com")
 		os.Exit(1)
 	}
+
 	color.Yellow.Println("Press control+c to stop")
 	time.Sleep(2 * time.Second)
+
 	start := time.Now()
+
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
@@ -131,6 +136,7 @@ func main() {
 		color.Blue.Println("\nAttempted to send", fncCount.Count(), "requests in", time.Since(start)) // print when control+c is pressed
 		os.Exit(1)
 	}()
+
 	p := parallel.NewParallel() // runs function in parallel
 	p.Register(loop)
 	p.Register(loop)
