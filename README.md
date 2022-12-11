@@ -6,8 +6,6 @@ This program can send more than 1,000 requests per second from a single machine.
 ```
 git clone https://github.com/zer-far/getblaze
 cd getblaze
-go mod init getblaze
-go mod tidy
 go build
 ```
 
