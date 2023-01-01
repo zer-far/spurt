@@ -30,8 +30,6 @@ var (
 	}
 	fncCount = NewCount()
 	hostname string
-	sleep time.Duration
-	timeout time.Duration
 	param_joiner string
 )
 
