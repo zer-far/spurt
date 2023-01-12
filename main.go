@@ -2,7 +2,7 @@ package main
 
 import (
 	"flag"
-	"log"
+	"fmt"
 	"math/rand"
 	"net/http"
 	"os"
@@ -77,7 +77,7 @@ func get() {
 
 	req, err := http.NewRequest("GET", hostname+param_joiner+buildblock(rand.Intn(7)+3)+"="+buildblock(rand.Intn(7)+3), nil)
 	if err != nil {
-		log.Fatal(err)
+		fmt.Println(err)
 	}
 
 	req.Header.Set("User-Agent", uarand.GetRandom())
