@@ -1,18 +1,19 @@
 package main
 
 import (
-	"net/http"
-	"time"
-	"log"
-	"os"
-	"sync"
-	"os/signal"
-	"syscall"
-	"math/rand"
-	"strconv"
 	"flag"
-	"github.com/buptmiao/parallel"
+	"log"
+	"math/rand"
+	"net/http"
+	"os"
+	"os/signal"
+	"strconv"
 	"strings"
+	"sync"
+	"syscall"
+	"time"
+
+	"github.com/buptmiao/parallel"
 	"github.com/corpix/uarand"
 	"github.com/gookit/color"
 )
@@ -28,15 +29,15 @@ var (
 		"https://www.google.cf/?q=",
 		"https://www.google.nl/?q=",
 	}
-	fncCount = NewCount()
-	hostname string
+	fncCount     = NewCount()
+	hostname     string
 	param_joiner string
 )
 
 func buildblock(size int) (s string) {
 	var a []rune
 	for i := 0; i < size; i++ {
-		a = append(a, rune(rand.Intn(25) + 65))
+		a = append(a, rune(rand.Intn(25)+65))
 	}
 	return string(a)
 }
@@ -74,16 +75,16 @@ func get() {
 		Timeout: 3500 * time.Millisecond,
 	}
 
-	req, err := http.NewRequest("GET", hostname + param_joiner + buildblock(rand.Intn(7) + 3) + "=" + buildblock(rand.Intn(7) + 3), nil)
+	req, err := http.NewRequest("GET", hostname+param_joiner+buildblock(rand.Intn(7)+3)+"="+buildblock(rand.Intn(7)+3), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	req.Header.Set("User-Agent", uarand.GetRandom())
-	req.Header.Add("Pragma", "no-cache") // used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
-	req.Header.Add("Cache-Control", "no-store, no-cache") // creates more load on web server
-	req.Header.Set("Referer", referers[rand.Intn(len(referers))]+buildblock(rand.Intn(5) + 5)) // uses random referer from list
-	req.Header.Set("Keep-Alive", strconv.Itoa(rand.Intn(10) + 100))
+	req.Header.Add("Pragma", "no-cache")                                                     // used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
+	req.Header.Add("Cache-Control", "no-store, no-cache")                                    // creates more load on web server
+	req.Header.Set("Referer", referers[rand.Intn(len(referers))]+buildblock(rand.Intn(5)+5)) // uses random referer from list
+	req.Header.Set("Keep-Alive", strconv.Itoa(rand.Intn(10)+100))
 	req.Header.Set("Connection", "keep-alive")
 
 	resp, err := c.Do(req)
