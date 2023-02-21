@@ -1,2 +1,2 @@
 build:
-  go build -ldflags="-s -w" -o getblaze main.go
+	go build -ldflags="-s -w" -o getblaze main.go
