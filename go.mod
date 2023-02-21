@@ -1,4 +1,4 @@
-module getblaze
+module github.com/zer-far/getblaze
 
 go 1.18
 
