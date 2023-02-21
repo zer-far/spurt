@@ -7,7 +7,7 @@ Getblaze is a [DoS (Denial of Service)](https://en.wikipedia.org/wiki/Denial-of-
 ```bash
   git clone https://github.com/zer-far/getblaze
   cd getblaze
-  go build
+  make
 ```
 
 ## Usage
