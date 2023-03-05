@@ -9,10 +9,9 @@ import (
 	"os/signal"
 	"strconv"
 	"strings"
-	"sync"
 	"syscall"
 	"time"
-
+	"sync/atomic"
 	"github.com/buptmiao/parallel"
 	"github.com/corpix/uarand"
 	"github.com/gookit/color"
@@ -29,9 +28,9 @@ var (
 		"https://www.google.cf/?q=",
 		"https://www.google.nl/?q=",
 	}
-	fncCount     = NewCount()
 	hostname     string
 	param_joiner string
+	reqCount uint64
 )
 
 func buildblock(size int) (s string) {
@@ -40,28 +39,6 @@ func buildblock(size int) (s string) {
 		a = append(a, rune(rand.Intn(25)+65))
 	}
 	return string(a)
-}
-
-type Count struct {
-	mx    *sync.Mutex
-	count int
-}
-
-func NewCount() *Count {
-	return &Count{mx: new(sync.Mutex), count: 0}
-}
-
-func (c *Count) Incr() {
-	c.mx.Lock()
-	c.count++
-	c.mx.Unlock()
-}
-
-func (c *Count) Count() int {
-	c.mx.Lock()
-	count := c.count
-	c.mx.Unlock()
-	return count
 }
 
 func get() {
@@ -89,7 +66,7 @@ func get() {
 
 	resp, err := c.Do(req)
 
-	fncCount.Incr()
+	atomic.AddUint64(&reqCount, 1) // increment
 
 	if os.IsTimeout(err) {
 		color.Red.Println("Timeout")
@@ -132,7 +109,7 @@ func main() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		color.Blue.Println("\nAttempted to send", fncCount.Count(), "requests in", time.Since(start)) // print when control+c is pressed
+		color.Blue.Println("\nAttempted to send", reqCount, "requests in", time.Since(start)) // print when control+c is pressed
 		os.Exit(1)
 	}()
 
