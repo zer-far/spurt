@@ -9,9 +9,10 @@ import (
 	"os/signal"
 	"strconv"
 	"strings"
+	"sync/atomic"
 	"syscall"
 	"time"
-	"sync/atomic"
+
 	"github.com/buptmiao/parallel"
 	"github.com/corpix/uarand"
 	"github.com/gookit/color"
@@ -30,7 +31,7 @@ var (
 	}
 	hostname     string
 	param_joiner string
-	reqCount uint64
+	reqCount     uint64
 )
 
 func buildblock(size int) (s string) {
