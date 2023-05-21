@@ -1,13 +1,13 @@
 # Getblaze
 
-Getblaze is a [DoS (Denial of Service)](https://en.wikipedia.org/wiki/Denial-of-service_attack) tool that can send over 1k GET requests per second and overload web servers.
+Getblaze is a powerful testing tool designed to simulate high volumes of traffic and evaluate the performance and resilience of web servers.
 
 ## Building
 
 ```bash
-  git clone https://github.com/zer-far/getblaze
-  cd getblaze
-  make
+git clone https://github.com/zer-far/getblaze
+cd getblaze
+make
 ```
 
 ## Usage
@@ -15,8 +15,10 @@ Getblaze is a [DoS (Denial of Service)](https://en.wikipedia.org/wiki/Denial-of-
 ```bash
 ./getblaze --hostname https://example.com
 ```
-Press control+c to stop.
+Press Ctrl+C to stop Getblaze.
 
 ## Note
 
-This program might slow your Internet connection down because it sends many requests and the target will send responses back.
+Please note that the primary purpose of Getblaze is to assess the performance and robustness of web servers under controlled conditions. It is not intended for malicious use or to facilitate any form of Denial of Service (DoS) attack. Unauthorized or inappropriate usage of this tool is strictly prohibited and may have legal consequences.
+
+Additionally, it's important to consider the potential impact on your internet connection while running Getblaze. The tool generates a substantial amount of traffic, which may temporarily slow down your internet connection.
