@@ -1,4 +1,4 @@
-module github.com/zer-far/getblaze
+module github.com/zer-far/spurt
 
 go 1.18
 

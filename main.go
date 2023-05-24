@@ -90,14 +90,14 @@ func loop() {
 }
 
 func main() {
-	color.Cyan.Println("getblaze - https://github.com/zer-far/getblaze")
+	color.Cyan.Println("Spurt - https://github.com/zer-far/spurt")
 
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
 	flag.Parse()
 
 	if len(hostname) == 0 {
 		color.Red.Println("Missing hostname.")
-		color.Blue.Println("Example usage:\n\t ./getblaze --hostname https://example.com")
+		color.Blue.Println("Example usage:\n\t ./spurt --hostname https://example.com")
 		os.Exit(1)
 	}
 
