@@ -18,6 +18,16 @@ import (
 )
 
 var (
+	version string = "v1.0.0"
+
+	banner string = fmt.Sprintf(`
+                          __
+   _________  __  _______/ /_
+  / ___/ __ \/ / / / ___/ __/
+ (__  ) /_/ / /_/ / /  / /_
+/____/ .___/\__,_/_/   \__/
+    /_/                      ` + version)
+
 	referrers []string = []string{
 		"https://www.google.com/?q=",
 		"https://www.facebook.com/",
@@ -92,7 +102,8 @@ func loop() {
 }
 
 func main() {
-	color.Cyan.Println("Spurt - https://github.com/zer-far/spurt")
+	color.Cyan.Println(banner)
+	color.Cyan.Println("\n\t\tgithub.com/zer-far\n\n")
 
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
 	flag.Parse()
