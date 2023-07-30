@@ -1,3 +1,4 @@
+// spurt
 package main
 
 import (
@@ -18,9 +19,9 @@ import (
 )
 
 var (
-	version string = "v1.0.0"
+	version = "v1.0.1"
 
-	banner string = fmt.Sprintf(`
+	banner = fmt.Sprintf(`
                           __
    _________  __  _______/ /_
   / ___/ __ \/ / / / ___/ __/
@@ -28,7 +29,7 @@ var (
 /____/ .___/\__,_/_/   \__/
     /_/                      ` + version)
 
-	referrers []string = []string{
+	referrers = []string{
 		"https://www.google.com/?q=",
 		"https://www.facebook.com/",
 		"https://help.baidu.com/searchResult?keywords=",
@@ -42,7 +43,7 @@ var (
 		"https://www.usatoday.com/search/results?q=",
 	}
 	hostname     string
-	param_joiner string
+	paramJoiner string
 	reqCount     uint64
 )
 
@@ -56,16 +57,16 @@ func buildblock(size int) (s string) {
 
 func get() {
 	if strings.ContainsRune(hostname, '?') {
-		param_joiner = "&"
+		paramJoiner = "&"
 	} else {
-		param_joiner = "?"
+		paramJoiner = "?"
 	}
 
 	c := http.Client{
 		Timeout: 3500 * time.Millisecond,
 	}
 
-	req, err := http.NewRequest("GET", hostname+param_joiner+buildblock(rand.Intn(7)+3)+"="+buildblock(rand.Intn(7)+3), nil)
+	req, err := http.NewRequest("GET", hostname+paramJoiner+buildblock(rand.Intn(7)+3)+"="+buildblock(rand.Intn(7)+3), nil)
 	if err != nil {
 		fmt.Println(err)
 	}
