@@ -103,7 +103,7 @@ func loop() {
 
 func main() {
 	color.Cyan.Println(banner)
-	color.Cyan.Println("\n\t\tgithub.com/zer-far\n\n")
+	color.Cyan.Println("\n\t\tgithub.com/zer-far\n")
 
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
 	flag.Parse()
