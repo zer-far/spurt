@@ -42,9 +42,9 @@ var (
 		"https://vk.com/profile.php?auto=",
 		"https://www.usatoday.com/search/results?q=",
 	}
-	hostname     string
+	hostname    string
 	paramJoiner string
-	reqCount     uint64
+	reqCount    uint64
 )
 
 func buildblock(size int) (s string) {
