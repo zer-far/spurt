@@ -12,7 +12,7 @@ import (
 	"sync/atomic"
 	"syscall"
 	"time"
-
+	"io/ioutil"
 	"github.com/buptmiao/parallel"
 	"github.com/corpix/uarand"
 	"github.com/gookit/color"
@@ -105,6 +105,17 @@ func loop() {
 func main() {
 	color.Cyan.Println(banner)
 	color.Cyan.Println("\n\t\tgithub.com/zer-far\n")
+
+	ip, err := http.Get("https://ipinfo.tw/") // check public IP address
+	if err != nil {
+		fmt.Println(err)
+	}
+	defer ip.Body.Close()
+	body, err := ioutil.ReadAll(ip.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Printf(string(body) + "\n")
 
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
 	flag.Parse()
