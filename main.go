@@ -4,6 +4,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"os"
@@ -12,7 +13,7 @@ import (
 	"sync/atomic"
 	"syscall"
 	"time"
-	"io/ioutil"
+
 	"github.com/buptmiao/parallel"
 	"github.com/corpix/uarand"
 	"github.com/gookit/color"
