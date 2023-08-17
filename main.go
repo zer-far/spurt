@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	version = "v1.1.4"
+	version = "v1.1.5"
 
 	banner = fmt.Sprintf(`
                           __
@@ -76,7 +76,7 @@ func get() {
 	req.Header.Add("Pragma", "no-cache")                                                       // used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
 	req.Header.Add("Cache-Control", "no-store, no-cache")                                      // creates more load on web server
 	req.Header.Set("Referer", referrers[rand.Intn(len(referrers))]+buildblock(rand.Intn(5)+5)) // uses random referer from list
-	req.Header.Set("Keep-Alive", string(rand.Intn(10)+100))
+	req.Header.Set("Keep-Alive", fmt.Sprintf("%d", rand.Intn(10)+100))
 	req.Header.Set("Connection", "keep-alive")
 
 	resp, err := c.Do(req)
