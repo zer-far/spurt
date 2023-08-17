@@ -46,6 +46,7 @@ var (
 	hostname    string
 	paramJoiner string
 	reqCount    uint64
+	threads     int
 )
 
 func buildblock(size int) (s string) {
@@ -119,11 +120,17 @@ func main() {
 	fmt.Printf(string(body) + "\n")
 
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
+	flag.IntVar(&threads, "threads", 1, "Number of threads")
 	flag.Parse()
 
 	if len(hostname) == 0 {
 		color.Red.Println("Missing hostname.")
 		color.Blue.Println("Example usage:\n\t ./spurt --hostname https://example.com")
+		os.Exit(1)
+	}
+
+	if threads == 0 {
+		fmt.Println("Number of threads must be greater than 0.")
 		os.Exit(1)
 	}
 
@@ -141,7 +148,8 @@ func main() {
 	}()
 
 	p := parallel.NewParallel() // runs function in parallel
-	p.Register(loop)
-	p.Register(loop)
+	for i := 0; i < threads; i++ {
+		p.Register(loop)
+	}
 	p.Run()
 }
