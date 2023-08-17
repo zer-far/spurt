@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	version = "v1.1.6"
+	version = "v1.3.0"
 
 	banner = fmt.Sprintf(`
                           __
@@ -47,6 +47,7 @@ var (
 	paramJoiner string
 	reqCount    uint64
 	threads     int
+	check       bool
 )
 
 func buildblock(size int) (s string) {
@@ -55,6 +56,21 @@ func buildblock(size int) (s string) {
 		a = append(a, rune(rand.Intn(25)+65))
 	}
 	return string(a)
+}
+
+func fetchIP() {
+	ip, err := http.Get("https://ipinfo.tw/")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer ip.Body.Close()
+	body, err := io.ReadAll(ip.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Printf("\n%s\n", body)
 }
 
 func get() {
@@ -108,20 +124,14 @@ func main() {
 	color.Cyan.Println(banner)
 	color.Cyan.Println("\n\t\tgithub.com/zer-far\n")
 
-	ip, err := http.Get("https://ipinfo.tw/") // check public IP address
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer ip.Body.Close()
-	body, err := io.ReadAll(ip.Body)
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Printf(string(body) + "\n")
-
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
 	flag.IntVar(&threads, "threads", 1, "Number of threads")
+	flag.BoolVar(&check, "check", false, "Enable IP address check")
 	flag.Parse()
+
+	if check {
+		fetchIP()
+	}
 
 	if len(hostname) == 0 {
 		color.Red.Println("Missing hostname.")
