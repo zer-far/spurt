@@ -4,7 +4,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"math/rand"
 	"net/http"
 	"os"
@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	version = "v1.0.1"
+	version = "v1.1.4"
 
 	banner = fmt.Sprintf(`
                           __
@@ -112,7 +112,7 @@ func main() {
 		fmt.Println(err)
 	}
 	defer ip.Body.Close()
-	body, err := ioutil.ReadAll(ip.Body)
+	body, err := io.ReadAll(ip.Body)
 	if err != nil {
 		fmt.Println(err)
 	}
