@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	version = "v1.1.5"
+	version = "v1.1.6"
 
 	banner = fmt.Sprintf(`
                           __
@@ -137,7 +137,7 @@ func main() {
 	go func() {
 		<-c
 		color.Blue.Println("\nAttempted to send", reqCount, "requests in", time.Since(start)) // print when control+c is pressed
-		os.Exit(1)
+		os.Exit(0)
 	}()
 
 	p := parallel.NewParallel() // runs function in parallel
