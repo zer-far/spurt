@@ -1,4 +1,5 @@
 # Spurt
+[![Go](https://github.com/zer-far/spurt/workflows/Go/badge.svg)](https://github.com/zer-far/spurt/actions?query=workflow%3A%22Go%22)
 
 Spurt is a powerful testing tool designed to simulate high volumes of traffic and evaluate the performance and resilience of web servers.
 
