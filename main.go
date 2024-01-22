@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	version = "v1.3.0"
+	version = "v1.4.0"
 
 	banner = fmt.Sprintf(`
                           __
@@ -48,6 +48,11 @@ var (
 	reqCount    uint64
 	threads     int
 	check       bool
+	timeout		int
+	timeoutDuration time.Duration
+	c = &http.Client{
+		Timeout: timeoutDuration,
+	}
 )
 
 func buildblock(size int) (s string) {
@@ -78,10 +83,6 @@ func get() {
 		paramJoiner = "&"
 	} else {
 		paramJoiner = "?"
-	}
-
-	c := http.Client{
-		Timeout: 3500 * time.Millisecond,
 	}
 
 	req, err := http.NewRequest("GET", hostname+paramJoiner+buildblock(rand.Intn(7)+3)+"="+buildblock(rand.Intn(7)+3), nil)
@@ -125,6 +126,7 @@ func main() {
 	color.Cyan.Println("\n\t\tgithub.com/zer-far\n")
 
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
+	flag.IntVar(&timeout, "timeout", 3000, "Timeout in milliseconds")
 	flag.IntVar(&threads, "threads", 1, "Number of threads")
 	flag.BoolVar(&check, "check", false, "Enable IP address check")
 	flag.Parse()
@@ -143,6 +145,8 @@ func main() {
 		fmt.Println("Number of threads must be greater than 0.")
 		os.Exit(1)
 	}
+
+	timeoutDuration = time.Duration(timeout) * time.Millisecond
 
 	color.Yellow.Println("Press control+c to stop")
 	time.Sleep(2 * time.Second)
