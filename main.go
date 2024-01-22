@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	version = "v1.4.0"
+	version = "v1.5.0"
 
 	banner = fmt.Sprintf(`
                           __
@@ -50,6 +50,8 @@ var (
 	check       bool
 	timeout		int
 	timeoutDuration time.Duration
+	sleep       int
+	sleepDuration time.Duration
 	c = &http.Client{
 		Timeout: timeoutDuration,
 	}
@@ -117,7 +119,7 @@ func get() {
 func loop() {
 	for {
 		go get()
-		time.Sleep(1 * time.Millisecond) // sleep before sending request again
+		time.Sleep(sleepDuration) // sleep before sending request again
 	}
 }
 
@@ -127,6 +129,7 @@ func main() {
 
 	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
 	flag.IntVar(&timeout, "timeout", 3000, "Timeout in milliseconds")
+	flag.IntVar(&sleep, "sleep", 1, "Sleep time in milliseconds")
 	flag.IntVar(&threads, "threads", 1, "Number of threads")
 	flag.BoolVar(&check, "check", false, "Enable IP address check")
 	flag.Parse()
@@ -146,7 +149,9 @@ func main() {
 		os.Exit(1)
 	}
 
+	// convert values to milliseconds
 	timeoutDuration = time.Duration(timeout) * time.Millisecond
+	sleepDuration = time.Duration(sleep) * time.Millisecond
 
 	color.Yellow.Println("Press control+c to stop")
 	time.Sleep(2 * time.Second)
