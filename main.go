@@ -43,16 +43,16 @@ var (
 		"https://vk.com/profile.php?auto=",
 		"https://www.usatoday.com/search/results?q=",
 	}
-	hostname    string
-	paramJoiner string
-	reqCount    uint64
-	threads     int
-	check       bool
-	timeout		int
+	hostname        string
+	paramJoiner     string
+	reqCount        uint64
+	threads         int
+	check           bool
+	timeout         int
 	timeoutDuration time.Duration
-	sleep       int
-	sleepDuration time.Duration
-	c = &http.Client{
+	sleep           int
+	sleepDuration   time.Duration
+	c               = &http.Client{
 		Timeout: timeoutDuration,
 	}
 )
