@@ -13,6 +13,7 @@ import (
 	"sync/atomic"
 	"syscall"
 	"time"
+	"net/url"
 
 	"github.com/buptmiao/parallel"
 	"github.com/corpix/uarand"
@@ -63,6 +64,38 @@ func buildblock(size int) (s string) {
 		a = append(a, rune(rand.Intn(25)+65))
 	}
 	return string(a)
+}
+
+func isValidURL(inputURL string) bool {
+	// Check if the URL is in a valid format
+	_, err := url.ParseRequestURI(inputURL)
+	if err != nil {
+		fmt.Println("Error parsing URL:", err)
+		return false
+	}
+
+	// Check if the URL has a scheme (http or https)
+	u, err := url.Parse(inputURL)
+	if err != nil || u.Scheme == "" {
+		fmt.Println("Invalid URL scheme:", u.Scheme)
+		return false
+	}
+
+	// Check if the URL scheme is either http or https
+	if !strings.HasPrefix(u.Scheme, "http") {
+		fmt.Println("Unsupported URL scheme:", u.Scheme)
+		return false
+	}
+
+	// Additional check by making a request to the URL
+	resp, err := http.Get(inputURL)
+	if err != nil {
+		fmt.Println("Error making request:", err)
+		return false
+	}
+	defer resp.Body.Close()
+
+	return true
 }
 
 func fetchIP() {
@@ -138,12 +171,17 @@ func main() {
 		fetchIP()
 	}
 
-	if len(hostname) == 0 {
-		color.Red.Println("Missing hostname.")
-		color.Blue.Println("Example usage:\n\t ./spurt --hostname https://example.com")
+	if !isValidURL(hostname) {
 		os.Exit(1)
 	}
-
+	if timeout == 0 {
+		fmt.Println("Timeout must be greater than 0.")
+		os.Exit(1)
+	}
+	if sleep <= 0 {
+		fmt.Println("Sleep time must be greater than 0.")
+		os.Exit(1)
+	}
 	if threads == 0 {
 		fmt.Println("Number of threads must be greater than 0.")
 		os.Exit(1)
