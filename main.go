@@ -211,7 +211,7 @@ func main() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		fmt.Println("\nAttempted to send", reqCount, "requests in", time.Since(start)) // print when control+c is pressed
+		fmt.Println(colourise(blue, "\nAttempted to send"), reqCount, colourise(blue, "requests in"), time.Since(start)) // print when control+c is pressed
 		os.Exit(0)
 	}()
 
