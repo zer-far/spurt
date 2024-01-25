@@ -17,11 +17,10 @@ import (
 
 	"github.com/buptmiao/parallel"
 	"github.com/corpix/uarand"
-	"github.com/gookit/color"
 )
 
 var (
-	version = "v1.6.1"
+	version = "v1.6.2"
 
 	banner = fmt.Sprintf(`
                           __
@@ -44,6 +43,14 @@ var (
 		"https://vk.com/profile.php?auto=",
 		"https://www.usatoday.com/search/results?q=",
 	}
+
+	reset = "\033[0m"
+	red   = "\033[31m"
+	green = "\033[32m"
+	blue  = "\033[34m"
+	cyan = "\033[36m"
+	yellow = "\033[33m"
+
 	target        string
 	paramJoiner     string
 	reqCount        uint64
@@ -57,6 +64,10 @@ var (
 		Timeout: timeoutDuration,
 	}
 )
+
+func colourise(colour, s string) string {
+	return colour + s + reset
+}
 
 func buildblock(size int) (s string) {
 	var a []rune
@@ -137,13 +148,13 @@ func get() {
 	atomic.AddUint64(&reqCount, 1) // increment
 
 	if os.IsTimeout(err) {
-		color.Red.Println("Timeout")
+		fmt.Println(colourise(red, "Status: Timeout"))
 	} else {
-		color.Green.Println("OK")
+		fmt.Println(colourise(green, "Status: OK"))
 	}
 
 	if err != nil {
-		return
+		fmt.Println(colourise(red, "Error sending request: %s"), err)
 	}
 
 	defer resp.Body.Close()
@@ -157,8 +168,8 @@ func loop() {
 }
 
 func main() {
-	color.Cyan.Println(banner)
-	color.Cyan.Println("\n\t\tgithub.com/zer-far\n")
+	fmt.Println(colourise(cyan, banner))
+	fmt.Println(colourise(cyan, "\n\t\tgithub.com/zer-far\n"))
 
 	flag.StringVar(&target, "url", "", "URL to target.")
 	flag.IntVar(&timeout, "timeout", 3000, "Timeout in milliseconds.")
@@ -191,7 +202,7 @@ func main() {
 	timeoutDuration = time.Duration(timeout) * time.Millisecond
 	sleepDuration = time.Duration(sleep) * time.Millisecond
 
-	color.Yellow.Println("Press control+c to stop")
+	fmt.Println(colourise(yellow, "Press control+c to stop"))
 	time.Sleep(2 * time.Second)
 
 	start := time.Now()
@@ -200,7 +211,7 @@ func main() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		color.Blue.Println("\nAttempted to send", reqCount, "requests in", time.Since(start)) // print when control+c is pressed
+		fmt.Println("\nAttempted to send", reqCount, "requests in", time.Since(start)) // print when control+c is pressed
 		os.Exit(0)
 	}()
 
