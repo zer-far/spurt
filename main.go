@@ -44,7 +44,7 @@ var (
 		"https://vk.com/profile.php?auto=",
 		"https://www.usatoday.com/search/results?q=",
 	}
-	target        string
+	target          string
 	paramJoiner     string
 	reqCount        uint64
 	threads         int
