@@ -44,14 +44,14 @@ var (
 		"https://www.usatoday.com/search/results?q=",
 	}
 
-	reset = "\033[0m"
-	red   = "\033[31m"
-	green = "\033[32m"
-	blue  = "\033[34m"
-	cyan = "\033[36m"
+	reset  = "\033[0m"
+	red    = "\033[31m"
+	green  = "\033[32m"
+	blue   = "\033[34m"
+	cyan   = "\033[36m"
 	yellow = "\033[33m"
 
-	target        string
+	target          string
 	paramJoiner     string
 	reqCount        uint64
 	threads         int
