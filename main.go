@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	version = "v1.6.2"
+	version = "v1.6.3"
 
 	banner = fmt.Sprintf(`
                           __
@@ -125,12 +125,6 @@ func fetchIP() {
 }
 
 func get() {
-	if strings.ContainsRune(target, '?') {
-		paramJoiner = "&"
-	} else {
-		paramJoiner = "?"
-	}
-
 	req, err := http.NewRequest("GET", target+paramJoiner+buildblock(rand.Intn(7)+3)+"="+buildblock(rand.Intn(7)+3), nil)
 	if err != nil {
 		fmt.Println(err)
@@ -201,6 +195,12 @@ func main() {
 	// convert values to milliseconds
 	timeoutDuration = time.Duration(timeout) * time.Millisecond
 	sleepDuration = time.Duration(sleep) * time.Millisecond
+
+	if strings.ContainsRune(target, '?') {
+		paramJoiner = "&"
+	} else {
+		paramJoiner = "?"
+	}
 
 	fmt.Println(colourise(yellow, "Press control+c to stop"))
 	time.Sleep(2 * time.Second)
