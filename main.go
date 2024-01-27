@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	version = "v1.6.5"
+	version = "v1.7.5"
 
 	banner = fmt.Sprintf(`
                           __
@@ -207,6 +207,8 @@ func main() {
 		paramJoiner = "?"
 	}
 
+	fmt.Printf(colourise(blue, "URL: %s\nTimeout (ms): %d\nSleep (ms): %d\nThreads: %d\n"), target, timeout, sleep, threads)
+
 	fmt.Println(colourise(yellow, "Press control+c to stop"))
 	time.Sleep(2 * time.Second)
 
@@ -216,7 +218,11 @@ func main() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
-		fmt.Println(colourise(blue, "\nAttempted to send"), reqCount, colourise(blue, "requests in"), time.Since(start)) // Print when control+c is pressed
+		elapsed := time.Since(start).Seconds()
+		// roundedElapsed := time.Duration(int64(elapsed*100)) * time.Millisecond
+		rps := float64(reqCount)/elapsed
+		fmt.Printf(colourise(blue, "\nTotal time (s): %.2f\nRequests: %d\nRequests per second: %.2f\n"), elapsed, reqCount, rps)
+
 		os.Exit(0)
 	}()
 
