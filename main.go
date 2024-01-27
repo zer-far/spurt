@@ -220,7 +220,7 @@ func main() {
 		<-c
 		elapsed := time.Since(start).Seconds()
 		// roundedElapsed := time.Duration(int64(elapsed*100)) * time.Millisecond
-		rps := float64(reqCount)/elapsed
+		rps := float64(reqCount) / elapsed
 		fmt.Printf(colourise(blue, "\nTotal time (s): %.2f\nRequests: %d\nRequests per second: %.2f\n"), elapsed, reqCount, rps)
 
 		os.Exit(0)
