@@ -50,7 +50,7 @@ var (
 	blue   = "\033[34m"
 	cyan   = "\033[36m"
 	yellow = "\033[33m"
-	clear = "\033[2K\r"
+	clear  = "\033[2K\r"
 
 	target          string
 	paramJoiner     string
