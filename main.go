@@ -17,11 +17,11 @@ import (
 	"time"
 
 	"github.com/buptmiao/parallel"
-	"github.com/corpix/uarand"
+	"github.com/zer-far/roulette"
 )
 
 var (
-	version = "v1.7.5"
+	version = "v1.8.0"
 
 	banner = fmt.Sprintf(`
                           __
@@ -30,20 +30,6 @@ var (
  (__  ) /_/ / /_/ / /  / /_
 /____/ .___/\__,_/_/   \__/
     /_/                      ` + version)
-
-	referrers = []string{
-		"https://www.google.com/?q=",
-		"https://www.facebook.com/",
-		"https://help.baidu.com/searchResult?keywords=",
-		"https://steamcommunity.com/market/search?q=",
-		"https://www.youtube.com/",
-		"https://www.bing.com/search?q=",
-		"https://r.search.yahoo.com/",
-		"https://www.ted.com/search?q=",
-		"https://play.google.com/store/search?q=",
-		"https://vk.com/profile.php?auto=",
-		"https://www.usatoday.com/search/results?q=",
-	}
 
 	reset  = "\033[0m"
 	red    = "\033[31m"
@@ -132,10 +118,10 @@ func get() {
 		fmt.Println(err)
 	}
 
-	req.Header.Set("User-Agent", uarand.GetRandom())
+	req.Header.Set("User-Agent", roulette.GetUserAgent())
 	req.Header.Add("Pragma", "no-cache")                  // Used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
 	req.Header.Add("Cache-Control", "no-store, no-cache") // Creates more load on web server
-	req.Header.Set("Referer", referrers[rand.Intn(len(referrers))]+buildblock(rand.Intn(5)+5))
+	req.Header.Set("Referer", roulette.GetReferrer()+"?q="+buildblock(rand.Intn(5)+5))
 	req.Header.Set("Keep-Alive", fmt.Sprintf("%d", rand.Intn(10)+100))
 	req.Header.Set("Connection", "keep-alive")
 
