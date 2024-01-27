@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
+	"net"
 	"net/http"
 	"net/url"
 	"os"
@@ -20,7 +21,7 @@ import (
 )
 
 var (
-	version = "v1.6.4"
+	version = "v1.6.5"
 
 	banner = fmt.Sprintf(`
                           __
@@ -142,17 +143,20 @@ func get() {
 
 	atomic.AddUint64(&reqCount, 1) // Increment number of requests sent
 
-	if os.IsTimeout(err) {
+	// Check for timeout
+	if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
 		fmt.Printf(colourise(red, clear+"Status: Timeout"))
+	} else if err != nil {
+		// Handle other types of errors
+		fmt.Printf(colourise(red, clear+"Error sending request: %s"), err)
 	} else {
 		fmt.Printf(colourise(green, clear+"Status: OK"))
 	}
 
-	if err != nil {
-		fmt.Printf(colourise(red, clear+"Error sending request: %s"), err)
+	// Close response body if not nil
+	if resp != nil {
+		defer resp.Body.Close()
 	}
-
-	defer resp.Body.Close()
 }
 
 func loop() {
