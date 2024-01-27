@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	version = "v1.6.3"
+	version = "v1.6.4"
 
 	banner = fmt.Sprintf(`
                           __
@@ -50,6 +50,7 @@ var (
 	blue   = "\033[34m"
 	cyan   = "\033[36m"
 	yellow = "\033[33m"
+	clear = "\033[2K\r"
 
 	target          string
 	paramJoiner     string
@@ -142,13 +143,13 @@ func get() {
 	atomic.AddUint64(&reqCount, 1) // Increment number of requests sent
 
 	if os.IsTimeout(err) {
-		fmt.Println(colourise(red, "Status: Timeout"))
+		fmt.Printf(colourise(red, clear+"Status: Timeout"))
 	} else {
-		fmt.Println(colourise(green, "Status: OK"))
+		fmt.Printf(colourise(green, clear+"Status: OK"))
 	}
 
 	if err != nil {
-		fmt.Println(colourise(red, "Error sending request: %s"), err)
+		fmt.Printf(colourise(red, clear+"Error sending request: %s"), err)
 	}
 
 	defer resp.Body.Close()
