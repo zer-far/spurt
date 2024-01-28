@@ -119,8 +119,7 @@ func get() {
 	}
 
 	req.Header.Set("User-Agent", roulette.GetUserAgent())
-	req.Header.Add("Pragma", "no-cache")                  // Used in case https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Pragma
-	req.Header.Add("Cache-Control", "no-store, no-cache") // Creates more load on web server
+	req.Header.Add("Cache-Control", "no-cache") // Creates more load on web server
 	req.Header.Set("Referer", roulette.GetReferrer()+"?q="+buildblock(rand.Intn(5)+5))
 	req.Header.Set("Keep-Alive", fmt.Sprintf("%d", rand.Intn(10)+100))
 	req.Header.Set("Connection", "keep-alive")
