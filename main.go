@@ -130,12 +130,12 @@ func get() {
 
 	// Check for timeout
 	if netErr, ok := err.(net.Error); ok && netErr.Timeout() {
-		fmt.Printf(colourise(red, clear+"Status: Timeout"))
+		fmt.Print(colourise(red, clear+"Status: Timeout"))
 	} else if err != nil {
 		// Handle other types of errors
 		fmt.Printf(colourise(red, clear+"Error sending request: %s"), err)
 	} else {
-		fmt.Printf(colourise(green, clear+"Status: OK"))
+		fmt.Print(colourise(green, clear+"Status: OK"))
 	}
 
 	// Close response body if not nil
