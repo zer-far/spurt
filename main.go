@@ -48,8 +48,8 @@ var (
 	timeoutDuration time.Duration
 	sleep           int
 	sleepDuration   time.Duration
-	cookie			string
-	useCookie		bool
+	cookie          string
+	useCookie       bool
 	c               = &http.Client{
 		Timeout: timeoutDuration,
 	}
