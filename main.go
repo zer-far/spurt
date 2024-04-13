@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	version = "v1.8.0"
+	version = "v1.9.0"
 
 	banner = fmt.Sprintf(`
                           __
@@ -48,6 +48,8 @@ var (
 	timeoutDuration time.Duration
 	sleep           int
 	sleepDuration   time.Duration
+	cookie			string
+	useCookie		bool
 	c               = &http.Client{
 		Timeout: timeoutDuration,
 	}
@@ -124,6 +126,11 @@ func get() {
 	req.Header.Set("Keep-Alive", fmt.Sprintf("%d", rand.Intn(10)+100))
 	req.Header.Set("Connection", "keep-alive")
 
+	// Use cookie if user supplied one
+	if useCookie {
+		req.Header.Set("Cookie", cookie)
+	}
+
 	resp, err := c.Do(req)
 
 	atomic.AddUint64(&reqCount, 1) // Increment number of requests sent
@@ -160,6 +167,7 @@ func main() {
 	flag.IntVar(&sleep, "sleep", 1, "Sleep time in milliseconds.")
 	flag.IntVar(&threads, "threads", 1, "Number of threads.")
 	flag.BoolVar(&checkIP, "check", false, "Enable IP address check.")
+	flag.StringVar(&cookie, "cookie", "", "Cookie to use for requests.")
 	flag.Parse()
 
 	if checkIP {
@@ -180,6 +188,10 @@ func main() {
 	if threads == 0 {
 		fmt.Println("Number of threads must be greater than 0.")
 		os.Exit(1)
+	}
+
+	if cookie != "" {
+		useCookie = true
 	}
 
 	// Convert values to milliseconds
