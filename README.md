@@ -13,7 +13,7 @@ Spurt first checks if the target URL is valid. A custom module is used to genera
 
 Make sure you have the following installed:
 - Go
-- Automake
+- Make
 - Git
 
 ### Steps
