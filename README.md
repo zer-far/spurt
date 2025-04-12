@@ -39,7 +39,7 @@ Press Ctrl+C to stop Spurt.
 - Option: --url string
 
 - Description: Sets the target URL for requests.
-- 
+
 ### Check IP address
 
 - Option: --check
