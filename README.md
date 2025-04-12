@@ -63,13 +63,17 @@ Press Ctrl+C to stop Spurt.
 ### Multi-threading
 
 - Option: --threads int
+  
 - Description: Specifies the number of threads for sending requests.
+  
 - Default: 1 thread
 
 ### Request timeout
 
 - Option: --timeout int
+  
 - Description: Sets a timeout (in ms) for each request to handle slow responses.
+  
 - Default: 3000 ms
 
 ### Example command
